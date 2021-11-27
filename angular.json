@@ -1,0 +1,1301 @@
+{
+	"version": 1,
+	"cli": {
+		"defaultCollection": "@nrwl/angular"
+	},
+	"schematics": {
+		"@nrwl/angular": {
+			"application": {
+				"linter": "eslint"
+			},
+			"library": {
+				"linter": "eslint"
+			},
+			"storybook-configuration": {
+				"linter": "eslint"
+			},
+			"component": {
+				"style": "css"
+			}
+		},
+		"@nrwl/angular:application": {
+			"style": "css",
+			"linter": "eslint",
+			"unitTestRunner": "jest",
+			"e2eTestRunner": "cypress"
+		},
+		"@nrwl/angular:library": {
+			"style": "css",
+			"linter": "eslint",
+			"unitTestRunner": "jest"
+		},
+		"@nrwl/angular:component": {
+			"style": "css"
+		}
+	},
+	"defaultProject": "flight-app",
+	"projects": {
+		"flight-app": {
+			"projectType": "application",
+			"root": "apps/flight-app",
+			"sourceRoot": "apps/flight-app/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "ngx-build-plus:browser",
+					"options": {
+						"outputPath": "dist/apps/flight-app",
+						"index": "apps/flight-app/src/index.html",
+						"main": "apps/flight-app/src/main.ts",
+						"polyfills": "apps/flight-app/src/polyfills.ts",
+						"tsConfig": "apps/flight-app/tsconfig.app.json",
+						"assets": [
+							"apps/flight-app/src/favicon.ico",
+							"apps/flight-app/src/assets"
+						],
+						"styles": [
+							"apps/flight-app/src/styles.css",
+							"apps/flight-app/src/assets/css/bootstrap.min.css",
+							"apps/flight-app/src/assets/css/paper-dashboard.css",
+							"apps/flight-app/src/assets/css/demo.css",
+							"apps/flight-app/src/assets/css/themify-icons.css"
+						],
+						"scripts": [],
+						"vendorChunk": true,
+						"extractLicenses": false,
+						"buildOptimizer": false,
+						"sourceMap": true,
+						"optimization": false,
+						"namedChunks": true,
+						"extraWebpackConfig": "apps/flight-app/webpack.config.js",
+						"commonChunk": false
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/flight-app/src/environments/environment.ts",
+									"with": "apps/flight-app/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							],
+							"extraWebpackConfig": "apps/flight-app/webpack.prod.config.js"
+						}
+					}
+				},
+				"serve": {
+					"builder": "ngx-build-plus:dev-server",
+					"options": {
+						"browserTarget": "flight-app:build",
+						"port": 5000,
+						"extraWebpackConfig": "apps/flight-app/webpack.config.js"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "flight-app:build:production",
+							"extraWebpackConfig": "apps/flight-app/webpack.prod.config.js"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "ngx-build-plus:extract-i18n",
+					"options": {
+						"browserTarget": "flight-app:build",
+						"extraWebpackConfig": "apps/flight-app/webpack.config.js"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/flight-app/src/**/*.ts",
+							"apps/flight-app/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/apps/flight-app"
+					],
+					"options": {
+						"jestConfig": "apps/flight-app/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"flight-app-e2e": {
+			"root": "apps/flight-app-e2e",
+			"sourceRoot": "apps/flight-app-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/flight-app-e2e/cypress.json",
+						"tsConfig": "apps/flight-app-e2e/tsconfig.e2e.json",
+						"devServerTarget": "flight-app:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "flight-app:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/flight-app-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"flight-lib": {
+			"projectType": "library",
+			"root": "libs/flight-lib",
+			"sourceRoot": "libs/flight-lib/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"tsConfig": "libs/flight-lib/tsconfig.lib.json",
+						"project": "libs/flight-lib/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/flight-lib/tsconfig.lib.prod.json"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/flight-lib/src/**/*.ts",
+							"libs/flight-lib/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/flight-lib"
+					],
+					"options": {
+						"jestConfig": "libs/flight-lib/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"logger-lib": {
+			"projectType": "library",
+			"root": "libs/logger-lib",
+			"sourceRoot": "libs/logger-lib/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:package",
+					"options": {
+						"tsConfig": "libs/logger-lib/tsconfig.lib.json",
+						"project": "libs/logger-lib/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/logger-lib/tsconfig.lib.prod.json"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/logger-lib/src/**/*.ts",
+							"libs/logger-lib/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/logger-lib"
+					],
+					"options": {
+						"jestConfig": "libs/logger-lib/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"dashboard-lib": {
+			"projectType": "library",
+			"root": "libs/dashboard-lib",
+			"sourceRoot": "libs/dashboard-lib/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"tsConfig": "libs/dashboard-lib/tsconfig.lib.json",
+						"project": "libs/dashboard-lib/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/dashboard-lib/tsconfig.lib.prod.json"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/dashboard-lib/src/**/*.ts",
+							"libs/dashboard-lib/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/dashboard-lib"
+					],
+					"options": {
+						"jestConfig": "libs/dashboard-lib/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"flight-admin": {
+			"projectType": "application",
+			"root": "apps/flight-admin",
+			"sourceRoot": "apps/flight-admin/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"outputPath": "dist/apps/flight-admin",
+						"index": "apps/flight-admin/src/index.html",
+						"main": "apps/flight-admin/src/main.ts",
+						"polyfills": "apps/flight-admin/src/polyfills.ts",
+						"tsConfig": "apps/flight-admin/tsconfig.app.json",
+						"assets": [
+							"apps/flight-admin/src/favicon.ico",
+							"apps/flight-admin/src/assets"
+						],
+						"styles": [
+							"apps/flight-admin/src/styles.css"
+						],
+						"scripts": [],
+						"vendorChunk": true,
+						"extractLicenses": false,
+						"buildOptimizer": false,
+						"sourceMap": true,
+						"optimization": false,
+						"namedChunks": true
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/flight-admin/src/environments/environment.ts",
+									"with": "apps/flight-admin/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "flight-admin:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "flight-admin:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "flight-admin:build"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/flight-admin/src/**/*.ts",
+							"apps/flight-admin/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/apps/flight-admin"
+					],
+					"options": {
+						"jestConfig": "apps/flight-admin/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"flight-admin-e2e": {
+			"root": "apps/flight-admin-e2e",
+			"sourceRoot": "apps/flight-admin-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/flight-admin-e2e/cypress.json",
+						"tsConfig": "apps/flight-admin-e2e/tsconfig.e2e.json",
+						"devServerTarget": "flight-admin:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "flight-admin:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/flight-admin-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"dashboard": {
+			"projectType": "application",
+			"root": "apps/dashboard",
+			"sourceRoot": "apps/dashboard/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"outputPath": "dist/apps/dashboard",
+						"index": "apps/dashboard/src/index.html",
+						"main": "apps/dashboard/src/main.ts",
+						"polyfills": "apps/dashboard/src/polyfills.ts",
+						"tsConfig": "apps/dashboard/tsconfig.app.json",
+						"assets": [
+							"apps/dashboard/src/favicon.ico",
+							"apps/dashboard/src/assets"
+						],
+						"styles": [
+							"apps/dashboard/src/styles.css"
+						],
+						"scripts": [],
+						"vendorChunk": true,
+						"extractLicenses": false,
+						"buildOptimizer": false,
+						"sourceMap": true,
+						"optimization": false,
+						"namedChunks": true
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/dashboard/src/environments/environment.ts",
+									"with": "apps/dashboard/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "dashboard:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "dashboard:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "dashboard:build"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/dashboard/src/**/*.ts",
+							"apps/dashboard/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/apps/dashboard"
+					],
+					"options": {
+						"jestConfig": "apps/dashboard/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"dashboard-e2e": {
+			"root": "apps/dashboard-e2e",
+			"sourceRoot": "apps/dashboard-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/dashboard-e2e/cypress.json",
+						"tsConfig": "apps/dashboard-e2e/tsconfig.e2e.json",
+						"devServerTarget": "dashboard:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "dashboard:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/dashboard-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"external": {
+			"projectType": "application",
+			"root": "apps/external",
+			"sourceRoot": "apps/external/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "ngx-build-plus:browser",
+					"options": {
+						"outputPath": "dist/apps/external",
+						"index": "apps/external/src/index.html",
+						"main": "apps/external/src/main.ts",
+						"polyfills": "apps/external/src/polyfills.ts",
+						"tsConfig": "apps/external/tsconfig.app.json",
+						"assets": [
+							"apps/external/src/favicon.ico",
+							"apps/external/src/assets"
+						],
+						"styles": [
+							"apps/external/src/styles.css"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/external/src/environments/environment.ts",
+									"with": "apps/external/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "ngx-build-plus:dev-server",
+					"options": {
+						"browserTarget": "external:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "external:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "external:build"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/external/src/**/*.ts",
+							"apps/external/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "ngx-build-plus:karma",
+					"outputs": [
+						"coverage/apps/external"
+					],
+					"options": {
+						"jestConfig": "apps/external/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"external-e2e": {
+			"root": "apps/external-e2e",
+			"sourceRoot": "apps/external-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/external-e2e/cypress.json",
+						"tsConfig": "apps/external-e2e/tsconfig.e2e.json",
+						"devServerTarget": "external:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "external:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/external-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"passenger-domain": {
+			"projectType": "library",
+			"root": "libs/passenger/domain",
+			"sourceRoot": "libs/passenger/domain/src",
+			"prefix": "passenger",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/passenger/domain/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/passenger/domain/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/passenger/domain/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/passenger/domain"
+					],
+					"options": {
+						"jestConfig": "libs/passenger/domain/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/passenger/domain/src/**/*.ts",
+							"libs/passenger/domain/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"passenger": {
+			"projectType": "application",
+			"root": "apps/passenger",
+			"sourceRoot": "apps/passenger/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "ngx-build-plus:browser",
+					"options": {
+						"outputPath": "dist/apps/passenger",
+						"index": "apps/passenger/src/index.html",
+						"main": "apps/passenger/src/main.ts",
+						"polyfills": "apps/passenger/src/polyfills.ts",
+						"tsConfig": "apps/passenger/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							"apps/passenger/src/favicon.ico",
+							"apps/passenger/src/assets"
+						],
+						"styles": [
+							"apps/passenger/src/styles.scss",
+							"apps/flight-app/src/assets/css/bootstrap.min.css",
+							"apps/flight-app/src/assets/css/paper-dashboard.css",
+							"apps/flight-app/src/assets/css/demo.css",
+							"apps/flight-app/src/assets/css/themify-icons.css"
+						],
+						"scripts": [],
+						"commonChunk": false,
+						"extraWebpackConfig": "apps/passenger/webpack.config.js"
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
+								}
+							],
+							"fileReplacements": [
+								{
+									"replace": "apps/passenger/src/environments/environment.ts",
+									"with": "apps/passenger/src/environments/environment.prod.ts"
+								}
+							],
+							"outputHashing": "all",
+							"extraWebpackConfig": "apps/passenger/webpack.prod.config.js"
+						},
+						"development": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "ngx-build-plus:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "passenger:build:production",
+							"extraWebpackConfig": "apps/passenger/webpack.prod.config.js"
+						},
+						"development": {
+							"browserTarget": "passenger:build:development"
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 3000,
+						"extraWebpackConfig": "apps/passenger/webpack.config.js"
+					}
+				},
+				"extract-i18n": {
+					"builder": "ngx-build-plus:extract-i18n",
+					"options": {
+						"browserTarget": "passenger:build",
+						"extraWebpackConfig": "apps/passenger/webpack.config.js"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/passenger/src/**/*.ts",
+							"apps/passenger/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "ngx-build-plus:karma",
+					"outputs": [
+						"coverage/apps/passenger"
+					],
+					"options": {
+						"jestConfig": "apps/passenger/jest.config.js",
+						"passWithNoTests": true,
+						"extraWebpackConfig": "apps/passenger/webpack.config.js"
+					}
+				}
+			}
+		},
+		"passenger-e2e": {
+			"root": "apps/passenger-e2e",
+			"sourceRoot": "apps/passenger-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/passenger-e2e/cypress.json",
+						"tsConfig": "apps/passenger-e2e/tsconfig.e2e.json",
+						"devServerTarget": "passenger:serve:development"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "passenger:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/passenger-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"passenger-feature-search": {
+			"projectType": "library",
+			"root": "libs/passenger/feature-search",
+			"sourceRoot": "libs/passenger/feature-search/src",
+			"prefix": "passenger",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/passenger/feature-search/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/passenger/feature-search/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/passenger/feature-search/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/passenger/feature-search"
+					],
+					"options": {
+						"jestConfig": "libs/passenger/feature-search/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/passenger/feature-search/src/**/*.ts",
+							"libs/passenger/feature-search/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"passenger-feature-edit": {
+			"projectType": "library",
+			"root": "libs/passenger/feature-edit",
+			"sourceRoot": "libs/passenger/feature-edit/src",
+			"prefix": "passenger",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/passenger/feature-edit/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/passenger/feature-edit/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/passenger/feature-edit/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/passenger/feature-edit"
+					],
+					"options": {
+						"jestConfig": "libs/passenger/feature-edit/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/passenger/feature-edit/src/**/*.ts",
+							"libs/passenger/feature-edit/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage-domain": {
+			"projectType": "library",
+			"root": "libs/luggage/domain",
+			"sourceRoot": "libs/luggage/domain/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage/domain/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage/domain/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage/domain/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage/domain"
+					],
+					"options": {
+						"jestConfig": "libs/luggage/domain/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage/domain/src/**/*.ts",
+							"libs/luggage/domain/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage-feature-checkin": {
+			"projectType": "library",
+			"root": "libs/luggage/feature-checkin",
+			"sourceRoot": "libs/luggage/feature-checkin/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage/feature-checkin/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage/feature-checkin/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage/feature-checkin/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage/feature-checkin"
+					],
+					"options": {
+						"jestConfig": "libs/luggage/feature-checkin/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage/feature-checkin/src/**/*.ts",
+							"libs/luggage/feature-checkin/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage-feature-report-loss": {
+			"projectType": "library",
+			"root": "libs/luggage/feature-report-loss",
+			"sourceRoot": "libs/luggage/feature-report-loss/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage/feature-report-loss/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage/feature-report-loss/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage/feature-report-loss/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage/feature-report-loss"
+					],
+					"options": {
+						"jestConfig": "libs/luggage/feature-report-loss/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage/feature-report-loss/src/**/*.ts",
+							"libs/luggage/feature-report-loss/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage2-domain": {
+			"projectType": "library",
+			"root": "libs/luggage2/domain",
+			"sourceRoot": "libs/luggage2/domain/src",
+			"prefix": "luggage2",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage2/domain/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage2/domain/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage2/domain/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage2/domain"
+					],
+					"options": {
+						"jestConfig": "libs/luggage2/domain/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage2/domain/src/**/*.ts",
+							"libs/luggage2/domain/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage2": {
+			"projectType": "application",
+			"root": "apps/luggage2",
+			"sourceRoot": "apps/luggage2/src",
+			"prefix": "flight-workspace",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"outputPath": "dist/apps/luggage2",
+						"index": "apps/luggage2/src/index.html",
+						"main": "apps/luggage2/src/main.ts",
+						"polyfills": "apps/luggage2/src/polyfills.ts",
+						"tsConfig": "apps/luggage2/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							"apps/luggage2/src/favicon.ico",
+							"apps/luggage2/src/assets"
+						],
+						"styles": [
+							"apps/luggage2/src/styles.scss"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
+								}
+							],
+							"fileReplacements": [
+								{
+									"replace": "apps/luggage2/src/environments/environment.ts",
+									"with": "apps/luggage2/src/environments/environment.prod.ts"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "luggage2:build:production"
+						},
+						"development": {
+							"browserTarget": "luggage2:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "luggage2:build"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/luggage2/src/**/*.ts",
+							"apps/luggage2/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/apps/luggage2"
+					],
+					"options": {
+						"jestConfig": "apps/luggage2/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"luggage2-e2e": {
+			"root": "apps/luggage2-e2e",
+			"sourceRoot": "apps/luggage2-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/luggage2-e2e/cypress.json",
+						"tsConfig": "apps/luggage2-e2e/tsconfig.e2e.json",
+						"devServerTarget": "luggage2:serve:development"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "luggage2:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"apps/luggage2-e2e/**/*.{js,ts}"
+						]
+					}
+				}
+			}
+		},
+		"luggage2-feature-checkin": {
+			"projectType": "library",
+			"root": "libs/luggage2/feature-checkin",
+			"sourceRoot": "libs/luggage2/feature-checkin/src",
+			"prefix": "luggage2",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage2/feature-checkin/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage2/feature-checkin/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage2/feature-checkin/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage2/feature-checkin"
+					],
+					"options": {
+						"jestConfig": "libs/luggage2/feature-checkin/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage2/feature-checkin/src/**/*.ts",
+							"libs/luggage2/feature-checkin/src/**/*.html"
+						]
+					}
+				}
+			}
+		},
+		"luggage2-feature-report-loss": {
+			"projectType": "library",
+			"root": "libs/luggage2/feature-report-loss",
+			"sourceRoot": "libs/luggage2/feature-report-loss/src",
+			"prefix": "luggage2",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/angular:ng-packagr-lite",
+					"options": {
+						"project": "libs/luggage2/feature-report-loss/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "libs/luggage2/feature-report-loss/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "libs/luggage2/feature-report-loss/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": [
+						"coverage/libs/luggage2/feature-report-loss"
+					],
+					"options": {
+						"jestConfig": "libs/luggage2/feature-report-loss/jest.config.js",
+						"passWithNoTests": true
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/luggage2/feature-report-loss/src/**/*.ts",
+							"libs/luggage2/feature-report-loss/src/**/*.html"
+						]
+					}
+				}
+			}
+		}
+	}
+}

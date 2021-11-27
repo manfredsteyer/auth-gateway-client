@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="header">
+    <h1 class="title">Welcome {{ userName }}</h1>
+  </div>
+
+
+
+  <div class="content">
+
+    <ng-container *ngIf="userInfo">
+      <h2>User Info</h2>
+
+      <pre>{{userInfo | json}}</pre>
+
+    </ng-container>
+
+    <button (click)="login()" class="btn btn-default">Login</button>
+    <button (click)="logout()" class="btn btn-default">Logout</button>
+  </div>
+</div>
+
+<div>
+  &nbsp;
+</div>
+
+<div>
+  <!-- <custom-checkbox [value]="expertMode" (changed)="changed($event)" label="Expert Mode"></custom-checkbox>  
+  {{expertMode}} -->
+</div>

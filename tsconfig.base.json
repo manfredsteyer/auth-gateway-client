@@ -1,0 +1,49 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@flight-workspace/flight-lib": ["libs/flight-lib/src/index.ts"],
+      "@flight-workspace/logger-lib": ["libs/logger-lib/src/index.ts"],
+      "@flight-workspace/dashboard-lib": ["libs/dashboard-lib/src/index.ts"],
+      "@flight-workspace/passenger/domain": [
+        "libs/passenger/domain/src/index.ts"
+      ],
+      "@flight-workspace/passenger/feature-search": [
+        "libs/passenger/feature-search/src/index.ts"
+      ],
+      "@flight-workspace/passenger/feature-edit": [
+        "libs/passenger/feature-edit/src/index.ts"
+      ],
+      "@flight-workspace/luggage/domain": ["libs/luggage/domain/src/index.ts"],
+      "@flight-workspace/luggage/feature-checkin": [
+        "libs/luggage/feature-checkin/src/index.ts"
+      ],
+      "@flight-workspace/luggage/feature-report-loss": [
+        "libs/luggage/feature-report-loss/src/index.ts"
+      ],
+      "@flight-workspace/luggage2/domain": [
+        "libs/luggage2/domain/src/index.ts"
+      ],
+      "@flight-workspace/luggage2/feature-checkin": [
+        "libs/luggage2/feature-checkin/src/index.ts"
+      ],
+      "@flight-workspace/luggage2/feature-report-loss": [
+        "libs/luggage2/feature-report-loss/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

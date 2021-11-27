@@ -1,0 +1,22 @@
+module.exports = {
+  projects: [
+    '<rootDir>/apps/flight-app',
+    '<rootDir>/libs/flight-lib',
+    '<rootDir>/libs/logger-lib',
+    '<rootDir>/libs/dashboard-lib',
+    '<rootDir>/apps/flight-admin',
+    '<rootDir>/apps/dashboard',
+    '<rootDir>/apps/external',
+    '<rootDir>/libs/passenger/domain',
+    '<rootDir>/apps/passenger',
+    '<rootDir>/libs/passenger/feature-search',
+    '<rootDir>/libs/passenger/feature-edit',
+    '<rootDir>/libs/luggage/domain',
+    '<rootDir>/libs/luggage/feature-checkin',
+    '<rootDir>/libs/luggage/feature-report-loss',
+    '<rootDir>/libs/luggage2/domain',
+    '<rootDir>/apps/luggage2',
+    '<rootDir>/libs/luggage2/feature-checkin',
+    '<rootDir>/libs/luggage2/feature-report-loss',
+  ],
+};
