@@ -51,7 +51,8 @@
 						"tsConfig": "apps/flight-app/tsconfig.app.json",
 						"assets": [
 							"apps/flight-app/src/favicon.ico",
-							"apps/flight-app/src/assets"
+							"apps/flight-app/src/assets",
+							"apps/flight-app/src/staticwebapp.config.json"
 						],
 						"styles": [
 							"apps/flight-app/src/styles.css",
